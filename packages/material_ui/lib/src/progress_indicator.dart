@@ -815,6 +815,41 @@ class _CircularProgressIndicatorPainter extends CustomPainter {
 /// The indicator arc is displayed with [valueColor], an animated value. To
 /// specify a constant color use: `AlwaysStoppedAnimation<Color>(color)`.
 ///
+/// ## Sizing
+///
+/// A [CircularProgressIndicator] has no intrinsic size. It fills whatever
+/// constraints its parent gives it, expanded to at least the minimum size in
+/// [constraints] (36x36 logical pixels by default). The arc is inscribed in
+/// the resulting box, so a box that is not square draws an ellipse rather than
+/// a circle.
+///
+/// This is most often encountered when the parent imposes a tight size, such as
+/// a [Flexible] with [FlexFit.tight], an [Expanded], or a [SizedBox] whose
+/// width and height differ. [constraints] cannot compensate for this: the
+/// parent's constraints take precedence, so a tight parent determines the size
+/// no matter what [constraints] says.
+///
+/// To keep the indicator circular, give it a square box:
+///
+/// ```dart
+/// const SizedBox.square(dimension: 48.0, child: CircularProgressIndicator())
+/// ```
+///
+/// To let the surrounding slot stretch while the indicator stays circular,
+/// loosen the constraints with an [Align] (or [Center]) and constrain the
+/// aspect ratio:
+///
+/// ```dart
+/// const Expanded(
+///   child: Center(
+///     child: AspectRatio(
+///       aspectRatio: 1.0,
+///       child: CircularProgressIndicator(),
+///     ),
+///   ),
+/// )
+/// ```
+///
 /// <callout-box>
 ///
 /// This example showcases determinate and indeterminate [CircularProgressIndicator]s.
@@ -1000,6 +1035,12 @@ class CircularProgressIndicator extends ProgressIndicator {
   final StrokeCap? strokeCap;
 
   /// Defines minimum and maximum sizes for a [CircularProgressIndicator].
+  ///
+  /// These are applied in addition to the constraints the parent provides, and
+  /// the parent's take precedence. A parent that imposes a tight size therefore
+  /// determines the size of the indicator on its own, regardless of this value.
+  /// See the "Sizing" section of [CircularProgressIndicator] for the resulting
+  /// behavior and for how to keep the indicator circular.
   ///
   /// If null, then the [ProgressIndicatorThemeData.constraints] will be used.
   /// Otherwise, defaults to a minimum width and height of 36 pixels.

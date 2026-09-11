@@ -1,0 +1,3 @@
+changelog: |
+  - Documents how `CircularProgressIndicator` is sized, why tight non-square constraints draw an ellipse, and how to keep it circular.
+version: patch
